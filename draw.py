@@ -114,17 +114,53 @@ def add_torus(polygons, cx, cy, cz, r0, r1, steps ):
     lat_stop = steps
     longt_start = 0
     longt_stop = steps
-
+    size = len(points)
     for lat in range(lat_start, lat_stop):
         for longt in range(longt_start, longt_stop):
             index = lat * steps + longt
 
-            add_edge(polygons, points[index][0],
-                     points[index][1],
-                     points[index][2],
-                     points[index][0]+1,
-                     points[index][1]+1,
-                     points[index][2]+1 )
+            if longt == steps - 1:
+                add_polygon(polygons,
+                         points[index][0],
+                         points[index][1],
+                         points[index][2],
+                         points[(index + steps) % size][0],
+                         points[(index + steps) % size][1],
+                         points[(index + steps) % size][2],
+                         points[(lat * steps + steps) % size][0],
+                         points[(lat * steps + steps) % size][1],
+                         points[(lat * steps + steps) % size][2])
+                add_polygon(polygons,
+                         points[index][0],
+                         points[index][1],
+                         points[index][2],
+                         points[(lat * steps + steps) % size][0],
+                         points[(lat * steps + steps) % size][1],
+                         points[(lat * steps + steps) % size][2],
+                         points[(lat * steps) % size][0],
+                         points[(lat * steps) % size][1],
+                         points[(lat * steps) % size][2])
+            else:
+                add_polygon(polygons,
+                         points[index][0],
+                         points[index][1],
+                         points[index][2],
+                         points[(index + steps) % size][0],
+                         points[(index + steps) % size][1],
+                         points[(index + steps) % size][2],
+                         points[(index + 1 + steps) % size][0],
+                         points[(index + 1 + steps) % size][1],
+                         points[(index + 1 + steps) % size][2])
+                add_polygon(polygons,
+                         points[index][0],
+                         points[index][1],
+                         points[index][2],
+                         points[(index + 1 + steps) % size][0],
+                         points[(index + 1 + steps) % size][1],
+                         points[(index + 1 + steps) % size][2],
+                         points[(index + 1) % size][0],
+                         points[(index + 1) % size][1],
+                         points[(index + 1) % size][2])
 
 def generate_torus( cx, cy, cz, r0, r1, steps ):
     points = []
